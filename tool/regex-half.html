@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<!--
+@Created on  : "Tuesday May 10 2022 21:10:21 GMT+0800 (China Standard Time)"
+@Author      : zorrow2017
+@Description : 代码自动生成器
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates and open the template in the editor.
+小成版 "Wednesday May 18 2022 15:41:43 GMT+0800 (China Standard Time)"
+
+
+<div>
+使用说明打开html慢慢看，
+</div>
+-->
+<html lang="zh-Hans-CN">
+
+
+<head>
+    <title>代码自动生成器</title>
+    <link href="file:///E:/proj/drei/doc/zorrow2017.ico" rel="shortcut icon" type="image/x-icon" src="" />
+    <meta charset="UTF-8">
+
+
+    <script type="text/javascript">
+        //全局变量定义
+        var gv_sep = "\n\n\n";
+        var gv_ascii = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"; //0x20 - 0x7f
+        var gv_example = ``;
+        var gv_file_text = "", gv_readFileAsync = 0;
+        /**
+         * regex json file
+         * */
+        var gt_regex = [{
+            "id": "A001",
+            "regex": /\b\w+\b/g,
+            "desc": "默认送一个regex，功能：匹配变量名，(变量名是由数字、字母、下划线组成的字符串)",
+            "bugfix": 20
+        }];
+        //某regex.bugfix=20表示有20%的把握认为没有bug，100表示趋于0，101表示绝对无bug，102更高，120封顶，-1、121、0.1非法
+        /**
+         * 消息框，只能显示按钮执行成功失败消息
+         **/
+        var go_output = null;
+        var go_regex = null;
+        //命名规范：对象lo_, 单值lv_, json结构体ls_, 数组lt_,
+        //命名规范：全局gv_, 局部lv_, 传入传出参数iv_ ev_
+
+
+        // **********************************************************************
+        // ** "F01: contains all subroutines
+        // **********************************************************************
+        function sub_init() {
+            var lo = document.getElementById("file01");
+            go_regex = document.getElementById("regex");
+            go_output = document.getElementById("out04");
+            go_output.value = "Ready.  初始化成功，准备就绪";
+
+
+            // //生成代码 genCode();  
+            // lv_example = gv_example.trim();
+            // var lo = document.getElementById("");
+            // lo.setAttribute("placeholder", lv_example);
+        }
+
+        
+        /**
+         * do something
+         * @description do
+         **/
+        function sub_doTransCall(iv_input) {
+            var lv_input = iv_input;
+            var es_out = {
+                "isSuccess": false,
+                "message": "initial",
+                "data": ""
+            };
+
+            //执行
+            //拼接模板字符串
+        }
+
+        function sub_doMatch() {
+            //取regex
+            var ls_re = sub_doCheck();
+
+            if (ls_re.isSuccess = false) {
+                go_output.value = ls_re.message;
+            } else {
+                //匹配text
+                var lo_text = document.getElementById("out02");
+                var lv_text = lo_text.value;
+                var lv_is_test_ok = ls_re.data.test(lv_text);
+
+                go_output.value = "is_test_ok=" + lv_is_test_ok;
+            }
+        }
+        function sub_doCheck() {
+            var ev_result = "";
+            var eo_regex = null;
+            var es_result = {
+                "isSuccess": false,
+                "message": "",
+                "data": null
+            };
+
+            var lv_re = go_regex.value;
+            //取gimu标记
+            lv_flag+=sub_getFlag("flag_global","g");
+            lv_flag+=sub_getFlag("flag_ignoreCase","i");
+            lv_flag+=sub_getFlag("flag_multiline","m");
+            lv_flag+=sub_getFlag("flag_unicode","u");
+
+            try {
+                //regex字符串转regex对象
+                // var lo_re = new RegExp(lv_re, "gimu");
+                var lo_re = new RegExp(lv_re, lv_flag);
+                es_result.isSuccess = true;
+                es_result.data = lo_re;
+                es_result.message = "success: " + lo_re.source;
+            } catch (lo_ex) {
+                es_result.message = lo_ex.toString();
+            }
+
+            //
+            go_output.value = es_result.message;
+            return es_result;
+        }
+        function sub_getFlag(iv_flagId,iv_result) {
+            //取gimu标记
+            var lv_flag="";
+            var lo_flagG=document.getElementById(iv_flagId);
+
+            if (lo_flagG!=undefined) {                
+            if (lo_flagG.checked===true) {
+                lv_flag=iv_result;
+            }
+        }
+
+            return lv_flag;
+        }
+        function sub_doHideChose() {
+            var lo = document.getElementById("choseRegex");
+            lo.hidden = true;
+            go_output.value = "hide";
+        }
+        function sub_doChose() {
+            var lo = document.getElementById("choseRegex");
+
+            //把json数组，转化为html的table
+            var lo_tbody = lo.getElementsByTagName("tbody")[0];
+            lo_tbody.innerHTML = "";
+            for (let lw_regex of gt_regex) {
+                let lo_row = document.createElement("tr");
+                // lo_row.ondblclick="doHideChose()";
+                lo_row.setAttribute("ondblclick", `doChoseOne("${lw_regex.id}")`);
+                let lo_td = document.createElement("td");
+                lo_td.innerHTML = lw_regex.id;
+                lo_row.appendChild(lo_td);
+                lo_td = document.createElement("td");
+                lo_td.innerHTML = lw_regex.regex;
+                lo_row.appendChild(lo_td);
+                lo_td = document.createElement("td");
+                lo_td.innerHTML = lw_regex.desc;
+                lo_row.appendChild(lo_td);
+                lo_tbody.appendChild(lo_row);
+            }
+
+            lo.hidden = false;
+            go_output.value = "please chose";
+        }
+        function sub_doChoseOne(iv_id) {
+            for (let lw_regex of gt_regex) {
+                if (lw_regex.id == iv_id) {
+                    let lv_ss = lw_regex.regex.toString();
+                    let lo_re = new RegExp(lw_regex.regex);
+
+                    go_regex.value = lo_re.source;
+                    go_output.value = "chose success: " + lo_re.source;
+                    return; //break;
+                }
+            }
+
+            go_output.value = "chose failure";
+
+            /*
+            {
+                //re gimu
+                var lo_re;
+                lo_re = new RegExp("\\w+", "gimu");  //gimu: global ignoreCase multiline unicode
+                lo_re == /\w+/gimu;  
+                lo_re.global==true  //Returns a Boolean value indicating the state of the global flag (g) used with a regular expression. Default is false. Read-only.
+                lo_re.ignoreCase==true  //Returns a Boolean value indicating the state of the ignoreCase flag (i) used with a regular expression. Default is false. Read-only.
+                lo_re.multiline==true  //Returns a Boolean value indicating the state of the multiline flag (m) used with a regular expression. Default is false. Read-only.
+                lo_re.source==\w+
+                lo_re.toString()=="/\\w+/gim"  ///\w+/gim
+            }
+            */
+        }
+
+        function sub_doSaveAs() {
+            var lo = document.getElementById("regex");
+            var lv = lo.value;
+            //文本下载
+            mod_saveFile(lv);
+        }
+        function sub_doExport() {
+            var lv = JSON.stringify(gt_regex);
+            //文本下载
+            mod_saveFile(lv);
+        }
+        function sub_doImport() {
+            var lo = document.getElementById("file01");
+
+            if (lo.files.length == 0) {
+                //如果没选文件，可以弹出文件选择框
+                lo.click();
+            }
+            if (lo.files.length == 0) {
+                return;
+            }
+
+            var lo_file = lo.files[0];
+            sub_readFile2(lo_file);
+            //异步读
+        }
+
+
+        /**
+         * data save as local file
+         * data upload to server file
+         **/
+        function mod_saveFile(iv_value, iv_filename = "file.txt", iv_type = "text/plain") {
+            //Create byte[] data
+            var lo_blob;
+            if (typeof window.Blob == "function") {
+                lo_blob = new Blob([iv_value], {
+                    type: iv_type
+                });
+            } else {
+                var BlobBuilder = window.BlobBuilder || window.MozBlobBuilder || window.WebKitBlobBuilder || window.MSBlobBuilder;
+                var lo_bb = new BlobBuilder();
+                lo_bb.append(iv_value);
+                lo_blob = lo_bb.getBlob(iv_type);
+            }
+
+            var URL = window.URL || window.webkitURL;
+            var lv_bloburl = URL.createObjectURL(lo_blob);
+            var lo_anchor = document.createElement("a");
+
+            //byte[] data to file
+            if ("download" in lo_anchor) {
+                lo_anchor.style.visibility = "hidden";
+                lo_anchor.href = lv_bloburl;
+                lo_anchor.download = iv_filename;
+                document.body.appendChild(lo_anchor);
+                var lo_evt = document.createEvent("MouseEvents");
+                lo_evt.initEvent("click", true, true);
+                lo_anchor.dispatchEvent(lo_evt);
+                document.body.removeChild(lo_anchor);
+            } else if (navigator.msSaveBlob) {
+                navigator.msSaveBlob(lo_blob, iv_filename);
+            } else {
+                location.href = lv_bloburl;
+            }
+
+            //blob:null/6715815e-48da-451f-b823-97af764deb10
+        }
+
+        function sub_readFile2(io_file) {
+            //BLOCK: read file async
+            var lv_str = "";
+            var lo_file = io_file;
+            var lo_reader = new FileReader();//new一个FileReader实例
+
+            //异步读文件
+            lo_reader.onload = function () {
+                let lv_tt;
+                try {
+                    let lv = this.result;  // reader.result为获取结果
+                    lv_tt = lv.toString();
+                } catch (ex) {
+                    gv_readFileAsync = 4;
+                    gv_file_text = ex.toString();
+                    return;
+                }
+                gv_file_text = lv_tt;
+                gv_readFileAsync = 3;
+                //
+                console.log(lv_tt.length);
+                go_output.value = "read file success: size is " + lv_tt.length;
+                gt_regex = JSON.parse(lv_tt);
+            };
+
+            lo_reader.readAsText(lo_file);
+
+            // lo_reader.readAsText(input.files[0],"utf8") // input.files[0]为第一个文件
+            // lv_str = lo_reader.result;
+            // return lv_str;
+            // if (/text+/.test(lo_file.type)) {//判断文件类型，是不是text类型
+            //  } else if(/image+/.test(lo_file.type)) {//判断文件是不是imgage类型
+            //      lo_reader.onload = function() {
+            //          $("body").append('<img src="' + this.result + '"/>');
+            //      }
+            //      lo_reader.readAsDataURL(lo_file);
+            //  }
+        }
+        /**
+         * 只能同步单个执行
+         **/
+        function sub_readFile(io_file) {
+            if (gv_readFileAsync != 0) {
+                //同步, 多线程 
+                return;
+            }
+            gv_readFileAsync = 1;
+
+            {
+                //BLOCK: read file async
+                var lv_str = "";
+                var lo_file = io_file;
+                var lo_reader = new FileReader();//new一个FileReader实例
+                lo_reader.onload = function () {
+                    try {
+                        let lv = this.result;  // reader.result为获取结果
+                    } catch (ex) {
+                        gv_readFileAsync = 4;
+                        gv_file_text = ex.toString();
+                        return;
+                    }
+                    gv_file_text = lv.toString();
+                    gv_readFileAsync = 3;
+                };
+                lo_reader.readAsText(lo_file);
+                // lo_reader.readAsText(input.files[0],"utf8") // input.files[0]为第一个文件
+                // lv_str = lo_reader.result;
+                // return lv_str;
+            }
+
+            var lo_handler = setTimeout(sub_readFileAsync, 1); //0.3s
+        }
+        function sub_readFileAsync(io_file) {
+            var lo_handler;
+
+            //{3:success,4:failure, 2:async waiting, 1.async}
+            if (gv_readFileAsync == 3 || gv_readFileAsync == 4) {
+                gv_readFileAsync = 0;
+                return;
+            }
+            if (gv_readFileAsync == 2 || gv_readFileAsync == 1) {
+                lo_handler = setTimeout(sub_readFileAsync, 300); //0.3s
+                return;
+            }
+            if (gv_readFileAsync != 1) {
+                //raise ex
+                return;
+            }
+        }
+
+        function sub_copyBlock(parid) {
+            //取 $("#parid").child("pre").first();
+            var par = document.getElementById(parid);
+            var pre = par.getElementsByClassName("codeBlock")[0];
+            if (pre == undefined) {
+                var pre = par.getElementsByTagName("pre")[0];
+            }
+
+            var lv_txt = pre.innerText;
+            // 创建元素用于复制
+            // const aux = document.createElement("textarea");
+            const lo_aux = document.getElementById("clipbo");
+            // 获取复制内容
+            // const content = txt;//"qqq"
+            // 设置元素内容
+            // aux.setAttribute("value", content);
+            lo_aux.value = lv_txt;
+            // 将元素插入页面进行调用
+            //  document.body.appendChild(aux);
+            // 复制内容
+            lo_aux.select();
+            // 将内容复制到剪贴板
+            document.execCommand("copy");
+            // // 删除创建元素
+            // document.body.removeChild(aux);
+        }
+        function sub_uriDec() {
+            var lo_text = document.getElementById("uriDec2");
+            var lo_enc = document.getElementById("uriEnc2");
+            // var lv_enc = lo_enc.textContent;
+            var lv_enc = lo_enc.value;
+
+            lv_enc = lv_enc.trim();
+            var lv_aim = unescape(lv_enc);
+
+            lo_text.value = lv_aim;
+        }
+        function sub_uriEnc() {
+            var lo_text = document.getElementById("uriDec2");
+            var lo_enc = document.getElementById("uriEnc2");
+            var lv_enc = lo_enc.value;
+            var lv_text = lo_text.value;
+
+            lv_enc = lv_text.trim();
+            var lv_aim = escape(lv_text);
+
+            lo_enc.value = lv_aim;
+        }
+        /**
+         *  把html转义成HTML实体字符
+         * @param str
+         * @returns {string}
+         * @constructor
+         */
+        function sub_htmlEncode(str) {
+            var s = "";
+            if (str.length === 0) {
+                return "";
+            }
+
+            s = str.replace(/&/g, "&amp;");
+            s = s.replace(/</g, "&lt;");
+            s = s.replace(/>/g, "&gt;");
+            // s = s.replace(/\\/g, "&gt;");
+            // s = s.replace(/ /g, "&nbsp;");
+            // s = s.replace(/\'/g, "&#39;");//IE下不支持实体名称
+            // s = s.replace(/\"/g, "&quot;");
+            return s;
+        }
+
+        /**
+         *  转义字符还原成html字符
+         * @param str
+         * @returns {string}
+         * @constructor
+         */
+        function sub_htmlRestore(str) {
+            var s = "";
+            if (str.length === 0) {
+                return "";
+            }
+
+            s = str.replace(/&amp;/g, "&");
+            s = s.replace(/&lt;/g, "<");
+            s = s.replace(/&gt;/g, ">");
+            // s = s.replace(/&nbsp;/g, " ");
+            // s = s.replace(/&#39;/g, "\'");
+            // s = s.replace(/&quot;/g, "\"");
+            return s;
+
+            // ————————————————
+            // 版权声明：本文为CSDN博主「zyk_520」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+            // 原文链接：https://blog.csdn.net/qq_15509267/article/details/84996708
+        }
+    </script>
+
+
+    <style type="text/css">
+        main {
+            /* margin: 上右下左 外边距; */
+            margin: 50px 10px 20px 3%;
+        }
+
+        #regex,
+        #input {
+            width: 80%;
+            height: 200px;
+        }
+
+        /* #out01, */
+        #out02,
+        #out04 {
+            width: 90%;
+            min-height: 300px;
+            border: solid 1px black;
+            margin-bottom: 5px;
+            /* display: inline-block; */
+        }
+
+        #out04 {
+            height: 100px;
+            min-height: 100px;
+        }
+
+        #out04a,
+        #out04b {
+            width: 40%;
+            display: inline-block;
+            min-height: 300px;
+            border: solid 1px black;
+            margin-bottom: 5px;
+        }
+
+        #out04b {
+            float: right;
+        }
+
+        #uriEnc2,
+        #uriDec2 {
+            /* width: 40%;
+      display: inline-block; */
+            min-height: 50px;
+            border: solid 1px black;
+            margin-bottom: 5px;
+            word-break: break-all;
+            width: 70%;
+        }
+
+        /* #uriDec2 {
+      float: right;
+    } */
+
+        #choseRegex thead {
+            background-color: lightgray;
+        }
+
+        #choseRegex,
+        #choseRegex td {
+            border: solid black 1px;
+            border-collapse: collapse;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        .btnRight {
+            margin-left: 50px;
+            border: solid darkblue 1px;
+            width: fit-content;
+            /* float: right; */
+        }
+
+        header {
+            /* position: fixed; */
+            margin: 0 10px 0 2%;
+        }
+
+        .rowLine li {
+            display: inline;
+        }
+
+        .rowLine {
+            display: inline;
+        }
+
+        .codeBlock {
+            border: solid 1px green;
+            margin-bottom: 30px;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+    </style>
+
+    <meta name="description" content="ABAP代码自动生成器">
+    <meta name="keywords" content="temp" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body onload="sub_init()">
+    <noscript>
+        <!-- 当浏览器不能解析js的时候显示noscript标签 -->
+        <strong>We're sorry but vue-app doesn't work properly without JavaScript enabled. Please enable it to
+            continue.</strong>
+        <br />
+        怎么连 JavaScript 都没有 😡 ???
+        <br /><br />
+    </noscript>
+
+    <header>
+        <ul class="rowLine" id="sitemap">
+            <!-- <li><a href="#lastlist" target="_self">lastlist</a></li> -->
+            <li> | <a href="#aa" target="_self">aa</a></li>
+            <li> | <a href="#read_text" target="_self">read_text</a></li>
+            <li> | <a href="#change_edit" target="_self">change_edit</a></li>
+            <li> | <a href="#zen01" target="_self">zen01</a></li>
+            </li>
+        </ul>
+        | <a href="#lastlist" title="模板最后" target="_self">lastlist</a>
+    </header>
+
+
+    <main>
+        <h1>Code Generator</h1>
+        <article>
+            <h2>&lt;html lang="zh-Hans-CN" - jim20220513</h2>
+            配合vscode之类的支持正则表达式的IDE一起使用
+            本html是对vscode正则表达式的增强，可以自己写代码扩展
+            <br />
+            regex:
+            <br />
+            <textarea id="regex"></textarea>
+            <br />
+
+            <ul>
+                <li>
+                    <input type="checkbox" id="flag_global" checked />global,
+                    <input type="checkbox" id="flag_ignoreCase" checked />ignoreCase,
+                    <input type="checkbox" id="flag_multiline" />multiline,
+                    <input type="checkbox" id="flag_unicode" checked />unicode,
+                </li>
+            </ul>
+            <br />
+
+            <button onclick="sub_doMatch()" title="">match out02</button>
+            <br />
+
+            <button onclick="sub_doCheck()" title="if the regex is correct">check regex</button>
+            <button onclick="sub_doChose()" title="chose one regex">chose regex</button>
+            <button onclick="sub_doHideChose()" title="chose one regex">hide chose</button>
+            <button onclick="sub_doSaveAs()" title="export text in textarea as a txt file">save as single</button>
+            <button onclick="sub_doExport()" title="export all regex to a json file(download)">export
+                all</button>
+            <button onclick="sub_doImport()" title="load all regex in json file">import</button>
+            <br />
+            id: <input type="text" maxlength="20" size="50" title="char40 unique key" />
+            description: <input type="text" title="" />
+            bugfix: <input type="text" title="" />
+            json file: <input type="file" id="file01" title="json file to import(not export)" />
+            <br />
+
+            <table id="choseRegex" hidden=true>
+                <caption title="ondblclick double click to chose one, 在表左边三击选中复制整表">value help of chose regex</caption>
+                <thead>
+                    <tr>
+                        <td>id</td>
+                        <td>regex</td>
+                        <td>desc</td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </article>
+
+
+        <article>
+            <br /><br />
+            out02:
+            <br />
+            <textarea id="out02"></textarea>
+            <textarea id="out04"></textarea>
+        </article>
+
+
+        <br /><br /><br /><br />
+        <article>
+            <h2>常用代码模板🗿🗿🗿</h2>
+
+            <div id="uriEnc">
+                <button onclick="sub_uriDec()">Decoded this uri into below:</button>
+                <textarea id="uriEnc2" ondblclick="sub_uriDec()" contenteditable="true"></textarea>
+                <br />
+                <button onclick="sub_uriEnc()">(re-Encode this Decoded uri Again:)</button>
+                <textarea id="uriDec2" contenteditable="true"></textarea>
+            </div>
+
+
+            剪切板文本框：<textarea id="clipbo"></textarea>
+            <section id="lastlist">
+                lastlist:
+                <button onclick="sub_copyBlock('lastlist')">🗊copy</button>
+                <a href="#sitemap" target="_self">↩back</a>
+                <pre class="codeBlock">
+    Hallo, Welt! 
+            </pre>
+            </section>
+        </article>
+
+    </main>
+
+
+    <br />
+    <footer>
+        <!-- 学习，没用的但常用的且易忘的小知识点： -->
+        <!-- <script src="https://cdn.staticfile.org/jquery/1.10.0/jquery.js"></script>  -->
+        <!-- <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script> -->
+        <!-- <link href="https://avatars.githubusercontent.com/u/32322882?s=400&u=51584158f037ca6d2eb0ddfbfe34facacb10e09f&v=4" rel="shortcut icon" type="image/x-icon" src="" /> -->
+        <!-- <link href="file:///E:/proj/drei/doc/zorrow2017.ico" rel="shortcut icon" type="image/x-icon" src="" /> -->
+        <!-- <html lang="zh-Hans-CN"> -->
+        <!-- json file: <input type="file" multiple=true title="json file to import/export" /> -->
+    </footer>
+    <br />
+</body>
+
+</html>
