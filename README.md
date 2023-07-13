@@ -21,6 +21,7 @@ GIT: first initial git vscode by jim 2023-06-25
 GIT: some gitee operation 0625
 GIT: gitee ok 0625
 GIT: add py and html template 0629
+GIT: md format prepare 0713
 
 
 ```powershell
@@ -51,12 +52,23 @@ git push https://gitee.com/jimvon/nplz.git master:master
 
 current
 ------------------------
-当前进度：
-nplz.md.txt 半成品20%
-tool\clickTimeInterval.py 已完成
-tool\regex-half.html 半成品30%
-other 未开始
+    当前进度：
+    nplz.md.txt 半成品20%
+    tool\clickTimeInterval.py 已完成
+    tool\regex-half.html 半成品30%
+    other 未开始
 
+
+reader
+------------------------
+```text
+阅读方式
+卡死
+
+  奸邪误国邪
+无条件卡死：该换电脑了
+有条件卡死：在你急办正事时，装死 逗你玩，平时不卡死
+```
 
 
 
